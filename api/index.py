@@ -1,44 +1,42 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user, UserMixin
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 import os
 import joblib
 import pandas as pd
+
 from helpers import preprocess_and_encode
 from models import User, Transaction
 from extensions import db
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.secret_key = 'secret'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')  # PostgreSQL
+
+# PostgreSQL connection (should be set in Vercel Environment Variables)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# Initialize extensions
 db.init_app(app)
+migrate = Migrate(app, db)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# Ensure folders
+# Create upload folder if not exists
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
-# Model loading
+# Load the trained model
 model = joblib.load('xgb_model.pkl')
-
-with app.app_context():
-    db.create_all()
-    if not User.query.filter_by(username='admin').first():
-        admin = User(username='admin', password='admin', is_admin=True)
-        db.session.add(admin)
-        db.session.commit()
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# ----------------------------- Your Existing Routes ----------------------------- #
 @app.route('/')
 def home():
     return redirect(url_for('login'))
