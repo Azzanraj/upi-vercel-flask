@@ -5,55 +5,30 @@ import os
 import joblib
 import pandas as pd
 from helpers import preprocess_and_encode
+from models import User, Transaction
+from extensions import db
 
 app = Flask(__name__)
 app.secret_key = 'secret'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')  # PostgreSQL
 app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# Load trained model
-model = joblib.load('xgb_model.pkl')
-
-# Create upload folder if not exists
+# Ensure folders
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
-# ----------------------------- MODELS -----------------------------------
-
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(80), nullable=False)
-    is_admin = db.Column(db.Boolean, default=False)
-
-class Transaction(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    Amount = db.Column(db.Float)
-    MerchantCategory = db.Column(db.String(50))
-    TransactionType = db.Column(db.String(20))
-    Latitude = db.Column(db.Float)
-    Longitude = db.Column(db.Float)
-    AvgTransactionAmount = db.Column(db.Float)
-    TransactionFrequency = db.Column(db.String(20))
-    UnusualLocation = db.Column(db.String(10))
-    UnusualAmount = db.Column(db.String(10))
-    NewDevice = db.Column(db.String(10))
-    FailedAttempts = db.Column(db.Integer)
-    BankName = db.Column(db.String(50))
-    result = db.Column(db.String(10))  # Fraud or Legit
-
-# ----------------------------- SETUP ------------------------------------
+# Model loading
+model = joblib.load('xgb_model.pkl')
 
 with app.app_context():
     db.create_all()
-    # Auto-create admin if not exists
     if not User.query.filter_by(username='admin').first():
         admin = User(username='admin', password='admin', is_admin=True)
         db.session.add(admin)
@@ -63,8 +38,7 @@ with app.app_context():
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# ----------------------------- ROUTES ------------------------------------
-
+# ----------------------------- Your Existing Routes ----------------------------- #
 @app.route('/')
 def home():
     return redirect(url_for('login'))
@@ -75,9 +49,7 @@ def login():
         user = User.query.filter_by(username=request.form['username']).first()
         if user and user.password == request.form['password']:
             login_user(user)
-            if user.is_admin:
-                return redirect(url_for('admin_dashboard'))
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('admin_dashboard' if user.is_admin else 'dashboard'))
         flash('Invalid credentials')
     return render_template('index.html')
 
@@ -87,7 +59,7 @@ def register():
         if User.query.filter_by(username=request.form['username']).first():
             flash('Username already exists')
             return redirect(url_for('register'))
-        user = User(username=request.form['username'], password=request.form['password'], is_admin=False)
+        user = User(username=request.form['username'], password=request.form['password'])
         db.session.add(user)
         db.session.commit()
         flash('Registered successfully')
@@ -149,7 +121,7 @@ def upload():
             flash('Uploaded successfully')
             return redirect(url_for('predict_all'))
         except Exception as e:
-            flash(f'Error processing file: {e}')
+            flash(f'Error: {e}')
     return render_template('upload.html')
 
 @app.route('/predict_all')
@@ -213,6 +185,3 @@ def delete_transaction(transaction_id):
 def logout():
     logout_user()
     return redirect(url_for('login'))
-
-if __name__ == '__main__':
-    app.run(debug=True)

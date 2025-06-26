@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: upi-flask-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: DATABASE_URL
+        value: postgres://neondb_owner:npg_F29bPyDCmQBi@ep-rough-smoke-a5wzboex-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
