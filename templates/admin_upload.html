@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Transactions</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center py-12 px-4">
+    <div class="max-w-md w-full bg-white rounded-lg shadow overflow-hidden">
+        <div class="px-8 pt-8 pb-6 text-center">
+            <h1 class="text-4xl font-bold text-indigo-600 mb-1">Fraud Shield</h1>
+            <p class="text-gray-500 mb-8">Transaction Security System</p>
+
+            <h2 class="text-2xl font-bold text-indigo-600 mb-8">Upload Transactions</h2>
+
+            <form method="post" enctype="multipart/form-data" class="mb-6">
+                <div class="mb-6">
+                    <label class="flex flex-col items-center px-4 py-6 bg-white text-indigo-600 rounded-lg shadow border border-indigo-600 tracking-wide cursor-pointer hover:bg-indigo-50 transition duration-200">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <span class="mt-2 text-base leading-normal">Select CSV file</span>
+                        <input type="file" name="file" required class="hidden" />
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center py-3 px-4 rounded-md font-medium transition duration-200">
+                    Upload File
+                </button>
+            </form>
+
+            <div class="relative py-3">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center">
+                    <span class="px-3 bg-white text-gray-500 text-sm">or</span>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{{ url_for('admin_dashboard') }}" class="block w-full text-indigo-600 hover:text-indigo-800 font-medium transition duration-200">
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

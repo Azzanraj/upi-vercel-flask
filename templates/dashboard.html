@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center py-12 px-4">
+    <div class="max-w-md w-full bg-white rounded-lg shadow overflow-hidden">
+        <div class="px-8 pt-8 pb-6 text-center">
+            <h1 class="text-4xl font-bold text-indigo-600 mb-1">Fraud Shield</h1>
+            <p class="text-gray-500 mb-8">Transaction Security System</p>
+
+            <h2 class="text-2xl font-bold text-indigo-600 mb-8">Welcome {{ username }}</h2>
+
+            <div class="space-y-4 mb-6">
+                <a href="{{ url_for('upload') }}" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center py-3 px-4 rounded-md font-medium transition duration-200">
+                    Upload CSV
+                </a>
+
+                <a href="{{ url_for('predict_all') }}" class="block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center py-3 px-4 rounded-md font-medium transition duration-200">
+                    Predict
+                </a>
+            </div>
+
+            <div class="relative py-3">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center">
+                    <span class="px-3 bg-white text-gray-500 text-sm">or</span>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{{ url_for('logout') }}" class="block w-full text-indigo-600 hover:text-indigo-800 font-medium transition duration-200">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

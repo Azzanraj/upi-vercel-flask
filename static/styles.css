@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #f8f9fa;
+}
+h2 {
+    color: #333;
+}
+form input[type="text"],
+form input[type="password"],
+form input[type="file"] {
+    padding: 6px;
+    margin: 5px 0;
+    width: 100%;
+    max-width: 300px;
+}
+form input[type="submit"] {
+    padding: 8px 15px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+form input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+table th, table td {
+    padding: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}

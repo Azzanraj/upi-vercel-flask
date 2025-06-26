@@ -1,0 +1,5 @@
+Amount,MerchantCategory,TransactionType,Latitude,Longitude,AvgTransactionAmount,TransactionFrequency,UnusualLocation,UnusualAmount,NewDevice,FailedAttempts,BankName
+8589.00,Electronics,P2M,23.354478,-40.536076,670.31,5/day,No,Yes,No,2,ICICI Bank
+1200.50,Restaurants,P2P,19.0760,72.8777,150.00,3/day,No,No,Yes,0,HDFC Bank
+350.00,Groceries,P2M,28.7041,77.1025,400.00,1/day,Yes,No,No,1,Axis Bank
+5000.00,Travel,P2P,34.0522,-118.2437,2500.00,5/day,No,Yes,No,3,State Bank of India

@@ -1,0 +1,68 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Results</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen py-12 px-4">
+    <div class="max-w-6xl mx-auto">
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="px-8 pt-8 pb-6 text-center">
+                <h1 class="text-4xl font-bold text-indigo-600 mb-1">Fraud Shield</h1>
+                <p class="text-gray-500 mb-8">Transaction Security System</p>
+                
+                <h2 class="text-2xl font-bold text-indigo-600 mb-8">Transaction Predictions</h2>
+                
+                <div class="overflow-x-auto mb-6">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr class="bg-indigo-600 text-white">
+                                <th class="py-3 px-4 text-left font-medium">ID</th>
+                                <th class="py-3 px-4 text-left font-medium">Amount</th>
+                                <th class="py-3 px-4 text-left font-medium">Merchant Category</th>
+                                <th class="py-3 px-4 text-left font-medium">Transaction Type</th>
+                                <th class="py-3 px-4 text-left font-medium">Prediction</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            {% for row in results %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 text-gray-800">{{ row.transaction.id }}</td>
+                                <td class="py-3 px-4 text-gray-800">${{ row.transaction.Amount }}</td>
+                                <td class="py-3 px-4 text-gray-800">{{ row.transaction.MerchantCategory }}</td>
+                                <td class="py-3 px-4 text-gray-800">{{ row.transaction.TransactionType }}</td>
+                                <td class="py-3 px-4">
+                                    {% if row.prediction == 1 %}
+                                        <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full font-medium text-sm">Fraud</span>
+                                    {% else %}
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full font-medium text-sm">Legitimate</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="relative py-3">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center">
+                        <span class="px-3 bg-white text-gray-500 text-sm">options</span>
+                    </div>
+                </div>
+                
+                <div class="mt-4 flex justify-center">
+                    <a href="{{ url_for('dashboard') }}" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md font-medium transition duration-200">
+                        Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

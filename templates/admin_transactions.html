@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - All Transactions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #5b48e0;
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        h2 {
+            color: #333;
+            margin: 30px 0;
+            font-weight: 600;
+            font-size: 24px;
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transaction-table th {
+            background-color: #f8f9fd;
+            color: #5b48e0;
+            text-align: left;
+            padding: 15px;
+            font-weight: 600;
+            border-bottom: 1px solid #eee;
+        }
+
+        .transaction-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            color: #444;
+        }
+
+        .transaction-table tr:nth-child(even) {
+            background-color: #f8f9fd;
+        }
+
+        .transaction-table tr:nth-child(odd) {
+            background-color: #fff;
+        }
+
+        .delete-btn {
+            background-color: #ef5a76;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .delete-btn:hover {
+            background-color: #e63f5a;
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: #5b48e0;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 20px;
+            transition: background-color 0.2s;
+            text-align: center;
+        }
+
+        .back-button:hover {
+            background-color: #4a3ac8;
+        }
+
+        .bottom-nav {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .result-legit {
+            color: #28a745; /* Green color for legitimate transactions */
+            font-weight: 500;
+        }
+
+        .result-fraud {
+            color: #dc3545; /* Red color for fraud transactions */
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Fraud Shield</h1>
+            <p>Transaction Security System</p>
+        </div>
+
+        <h2>All Transactions (Admin)</h2>
+
+        <table class="transaction-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User ID</th>
+                    <th>Amount</th>
+                    <th>Result</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td>{{ t.id }}</td>
+                    <td>{{ t.user_id }}</td>
+                    <td>₹{{ t.Amount }}</td>
+                    <td>
+                        {% if t.result == 'Fraud' or t.result == 'fraud' %}
+                        <span class="result-fraud">{{ t.result }}</span>
+                        {% else %}
+                        <span class="result-legit">{{ t.result }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('delete_transaction', transaction_id=t.id) }}" class="delete-btn">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="bottom-nav">
+            <a href="{{ url_for('admin_dashboard') }}" class="back-button">Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>
